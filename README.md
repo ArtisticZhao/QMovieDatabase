@@ -1,2 +1,2 @@
-# MovieDatabase
+# QMovieDatabase
 Personal movie database

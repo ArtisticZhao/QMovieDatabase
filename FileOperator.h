@@ -4,8 +4,7 @@
 #include <qdir.h>
 #include <QDirIterator>
 
-class FileOperator
-{
+class FileOperator {
 public:
 	static QList<QFileInfo> pathWalk(QString dirpath);
 };

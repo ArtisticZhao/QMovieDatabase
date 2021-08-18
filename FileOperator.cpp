@@ -11,8 +11,7 @@
 // Returns:     QT_NAMESPACE::QList<QT_NAMESPACE::QFileInfo>
 // Parameter:   QString dirpath
 //************************************
-QList<QFileInfo> FileOperator::pathWalk(QString dirpath)
-{
+QList<QFileInfo> FileOperator::pathWalk(QString dirpath) {
 	QStringList nameFilters;
 	nameFilters << "*.*";
 	QDirIterator iter(dirpath, nameFilters,
@@ -20,8 +19,7 @@ QList<QFileInfo> FileOperator::pathWalk(QString dirpath)
 		QDirIterator::Subdirectories);
 
 	QList<QFileInfo> files;
-	while (iter.hasNext())
-	{
+	while (iter.hasNext()) {
 		iter.next();
 		files << iter.fileInfo();
 	}
