@@ -85,6 +85,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DBHandler.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <QtRcc Include="QMovieDatabase.qrc" />
     <QtUic Include="QMovieDatabase.ui" />
     <QtMoc Include="QMovieDatabase.h" />
@@ -95,7 +97,9 @@
     <ResourceCompile Include="QMovieDatabase.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DBHandler.h" />
     <ClInclude Include="FileOperator.h" />
+    <ClInclude Include="Settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
