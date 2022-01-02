@@ -12,7 +12,7 @@ DBHandler::DBHandler(QString path) {
 		database.setDatabaseName(path);
 	}
 	openDb();
-	if (!isTableExist(QString("t_movie")))
+	if (!isTableExist(QString("t_movies")))
 	{
 		createTable();
 	}
@@ -20,9 +20,39 @@ DBHandler::DBHandler(QString path) {
 
 void DBHandler::createTable() {
 	QSqlQuery sqlQuery;
-	sqlQuery.prepare("CREATE TABLE t_movie (ID	TEXT PRIMARY KEY, Name TEXT, Path TEXT)");
+	QString query;
+	query =
+		"CREATE TABLE t_movies("\
+		"id INTEGER PRIMARY KEY AUTOINCREMENT,"\
+		"name TEXT,"\
+		"path TEXT"\
+		");"
+	;
+	if (!sqlQuery.exec(query)) {
+		qDebug() << "Error: Fail to create table. " << sqlQuery.lastError();
+		return;
+	}
+	query = 
+		"CREATE TABLE t_tags ("\
+		"id INTEGER PRIMARY KEY AUTOINCREMENT,"\
+		"name VARCHAR(30)"\
+		");"
+	;
+	if (!sqlQuery.exec(query)) {
+		qDebug() << "Error: Fail to create table. " << sqlQuery.lastError();
+		return;
+	}
+	query = 
+		"CREATE TABLE t_unions ("\
+		"id INTEGER PRIMARY KEY AUTOINCREMENT,"\
+		"movie_id INTEGER NULL,"\
+		"tag_id INTEGER NULL,"\
+		"CONSTRAINT fk_movie_id FOREIGN KEY (movie_id) REFERENCES t_movies (ID),"\
+		"CONSTRAINT fk_tag_id FOREIGN KEY(tag_id) REFERENCES t_tags(id)"\
+		");"
+	;
 	// Ö´ÐÐsqlÓï¾ä
-	if (!sqlQuery.exec()) {
+	if (!sqlQuery.exec(query)) {
 		qDebug() << "Error: Fail to create table. " << sqlQuery.lastError();
 	}
 	else {

@@ -10,8 +10,7 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 
 	qDebug() << settings.dbPath << settings.playerPath;
 	dbHandler = new DBHandler(settings.dbPath);
-	dbHandler->createTable();
-	qDebug() <<  dbHandler->isTableExist(QString("t_movie"));
+	qDebug() <<  dbHandler->isTableExist(QString("t_movies"));
 
 }
 
