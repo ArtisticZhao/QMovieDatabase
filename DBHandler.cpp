@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QMessageBox>
 
+
 DBHandler::DBHandler(QString path) {
 	model = nullptr;
 	qmodel = nullptr;
@@ -95,6 +96,7 @@ bool DBHandler::addFilesToDB(QList<QFileInfo> Files) {
 		QStringLiteral("扫描"), QStringLiteral("扫描完成"),
 		NULL, NULL);
 	messageBox.exec();
+	// 在扫描完路径之后刷新tableView
 	getSqlQueryModel();
 	return true;
 }
@@ -137,6 +139,7 @@ QSqlTableModel* DBHandler::getSqlTableModel() {
 }
 
 QSqlQueryModel* DBHandler::getSqlQueryModel() {
+	// 查询所有的信息，并且把标签信息合并到一起显示
 	auto query = QSqlQuery(
 		"SELECT t_movies.id, t_movies.name, group_concat(t_tags.name), t_movies.path "
 		"FROM t_movies "
@@ -145,8 +148,6 @@ QSqlQueryModel* DBHandler::getSqlQueryModel() {
 		"GROUP BY t_movies.id");
 	if (qmodel == nullptr) {
 		qmodel = new QSqlQueryModel;
-		// 查询所有的信息，并且把标签信息合并到一起显示
-		
 		qmodel->setQuery(query);
 		qmodel->setHeaderData(1, Qt::Horizontal, QStringLiteral("电影名称"));
 		qmodel->setHeaderData(2, Qt::Horizontal, QStringLiteral("标签"));
@@ -157,6 +158,43 @@ QSqlQueryModel* DBHandler::getSqlQueryModel() {
 		qmodel->setQuery(query);
 	}
 	return qmodel;
+}
+
+void DBHandler::getTags(QStandardItemModel* model, QList<int>* tagid) {
+	QSqlQuery query;
+	if (!query.exec("select id, name from t_tags")) {
+		qDebug() << "Error: " << query.lastError();
+		return;
+	}
+	
+	QStandardItem* Item = nullptr;
+	int index = 0;
+	while (query.next())
+	{
+		int id = query.value(0).toUInt();
+		QString name = query.value(1).toString();
+		qDebug() << id << name;
+		Item = new QStandardItem();
+		Item->setCheckable(true);
+		Item->setText(name);
+		model->setItem(index, Item);
+		tagid->append(id);
+		index++;
+	}
+}
+
+bool DBHandler::createTag(QString tag) {
+	QSqlQuery query;
+	QString sql = QString("INSERT INTO t_tags (`name`) VALUES (\"%1\")").arg(tag);
+	if (!query.exec(sql)) {
+		qDebug() << "Error: " << query.lastError();
+		return false;
+	}
+	else {
+		qDebug() << query.lastInsertId();  // 获取自增ID
+		emit newTagAdded(tag, query.lastInsertId().toUInt());
+		return true;
+	}
 }
 
 bool DBHandler::openDb(void) {

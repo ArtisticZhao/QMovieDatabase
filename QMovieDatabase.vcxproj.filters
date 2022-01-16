@@ -58,6 +58,12 @@
     <ClCompile Include="MovieTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TagFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateTagDiag.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileOperator.h">
@@ -66,7 +72,7 @@
     <ClInclude Include="Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DBHandler.h">
+    <ClInclude Include="Ui_Dialog_createTag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,5 +80,19 @@
     <QtMoc Include="MovieTable.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="CreateTagDiag.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="DBHandler.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TagFilter.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="createTag.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

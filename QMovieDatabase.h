@@ -5,6 +5,9 @@
 #include "Settings.h"
 #include "DBHandler.h"
 #include "MovieTable.h"
+#include "TagFilter.h"
+#include "CreateTagDiag.h"
+
 class QMovieDatabase : public QMainWindow {
 	Q_OBJECT
 
@@ -16,7 +19,10 @@ private:
 	Settings settings;
 	DBHandler* dbHandler;
 	MovieTable* movieTable;
+	TagFilter* tagFilter;
+	CreateTagDiag* createTag;
 	// ******* ²Û *******
 public slots:
 	void on_actionOpenDir_triggered();
+	void on_pb_addTag_clicked();
 };

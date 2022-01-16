@@ -5,9 +5,13 @@
 #include <QSqlQuery>
 #include <QSqlTableModel>
 #include <QSqlQueryModel>
+#include <QStandardItemModel>
 #include <qdir.h>
 
-class DBHandler {
+class DBHandler : public QObject{
+	Q_OBJECT
+signals:
+	void newTagAdded(QString tag, long id);
 public:
 	DBHandler(QString path);
 	void createTable();
@@ -19,6 +23,8 @@ public:
 	void getAllMovies();
 	QSqlTableModel* getSqlTableModel();
 	QSqlQueryModel* getSqlQueryModel();
+	void getTags(QStandardItemModel* tags, QList<int>* tagid);
+	bool createTag(QString tag);
 private:
 	QSqlDatabase database;
 	QSqlTableModel* model;

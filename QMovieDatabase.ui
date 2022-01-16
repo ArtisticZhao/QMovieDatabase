@@ -46,7 +46,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="pb_addTag">
           <property name="maximumSize">
            <size>
             <width>30</width>

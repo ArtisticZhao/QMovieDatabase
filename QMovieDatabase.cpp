@@ -5,11 +5,10 @@
 #include "QMovieDatabase.h"
 #include "FileOperator.h"
 
-
-
 QMovieDatabase::QMovieDatabase(QWidget* parent)
 	: QMainWindow(parent) {
 	ui.setupUi(this);
+	createTag = nullptr;
 	// 配置文件读取
 	qDebug() << settings.dbPath << settings.playerPath;
 	// 加载DB
@@ -18,13 +17,8 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 	movieTable = new MovieTable(ui.tableView);
 	movieTable->bindingModel(dbHandler->getSqlQueryModel());
 	// 设置 标签筛选器
-	QStandardItemModel* model = new QStandardItemModel();
-	QStandardItem* Item = new QStandardItem();
-	Item->setCheckable(true);
-	Item->setCheckState(Qt::Checked);
-	Item->setText("test");
-	model->setItem(0, Item);
-	ui.listView->setModel(model);
+	tagFilter = new TagFilter(ui.listView, dbHandler);
+	connect(dbHandler, SIGNAL(newTagAdded(QString, long)), tagFilter, SLOT(on_tagAdded(QString, long)));
 }
 
 void QMovieDatabase::on_actionOpenDir_triggered() {
@@ -39,8 +33,19 @@ void QMovieDatabase::on_actionOpenDir_triggered() {
 	}
 }
 
-
+void QMovieDatabase::on_pb_addTag_clicked() {
+	if (createTag == nullptr) {
+		createTag = new CreateTagDiag(this, dbHandler);
+	}
+	else {
+		delete createTag;
+		createTag = new CreateTagDiag(this, dbHandler);
+	}
+	
+}
 
 QMovieDatabase::~QMovieDatabase() {
 	delete dbHandler;
+	delete movieTable;
+	delete tagFilter;
 }

@@ -85,10 +85,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CreateTagDiag.cpp" />
     <ClCompile Include="DBHandler.cpp" />
     <ClCompile Include="MovieTable.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="TagFilter.cpp" />
     <QtRcc Include="QMovieDatabase.qrc" />
+    <QtUic Include="createTag.ui" />
     <QtUic Include="QMovieDatabase.ui" />
     <QtMoc Include="QMovieDatabase.h" />
     <ClCompile Include="FileOperator.cpp" />
@@ -98,8 +101,11 @@
     <ResourceCompile Include="QMovieDatabase.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DBHandler.h" />
+    <ClInclude Include="Ui_Dialog_createTag.h" />
+    <QtMoc Include="CreateTagDiag.h" />
+    <QtMoc Include="DBHandler.h" />
     <ClInclude Include="FileOperator.h" />
+    <QtMoc Include="TagFilter.h" />
     <QtMoc Include="MovieTable.h" />
     <ClInclude Include="Settings.h" />
   </ItemGroup>
