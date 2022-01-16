@@ -86,6 +86,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DBHandler.cpp" />
+    <ClCompile Include="MovieTable.cpp" />
     <ClCompile Include="Settings.cpp" />
     <QtRcc Include="QMovieDatabase.qrc" />
     <QtUic Include="QMovieDatabase.ui" />
@@ -99,6 +100,7 @@
   <ItemGroup>
     <ClInclude Include="DBHandler.h" />
     <ClInclude Include="FileOperator.h" />
+    <ClInclude Include="MovieTable.h" />
     <ClInclude Include="Settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

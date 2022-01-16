@@ -2,6 +2,8 @@
 #include <QDebug>
 
 DBHandler::DBHandler(QString path) {
+	model = nullptr;
+	qmodel = nullptr;
 	if (QSqlDatabase::contains("qt_sql_default_connection")) {
 		database = QSqlDatabase::database("qt_sql_default_connection");
 	}
@@ -16,6 +18,7 @@ DBHandler::DBHandler(QString path) {
 	{
 		createTable();
 	}
+	getAllMovies();
 }
 
 void DBHandler::createTable() {
@@ -65,8 +68,78 @@ bool DBHandler::isTableExist(QString& tableName) {
 	if (database.tables().contains(tableName)) {
 		return true;
 	}
-
 	return false;
+}
+
+bool DBHandler::addFilesToDB(QList<QFileInfo> Files) {
+	QSqlQuery sqlQuery;
+	QString insert_sql = "INSERT INTO t_movies (`name`, `path`) VALUES (?, ?)";
+	sqlQuery.prepare(insert_sql);
+	// 批量插入记录
+	QVariantList filenames;
+	QVariantList paths;
+	for (QFileInfo file : Files)
+	{
+		qDebug() << file.baseName() << file.absoluteFilePath();
+		filenames << file.baseName();
+		paths << file.absoluteFilePath();
+	}
+	sqlQuery.addBindValue(filenames);
+	sqlQuery.addBindValue(paths);
+
+	if (!sqlQuery.execBatch()) {
+		qDebug() << "Error: Fail to add files to DB. " << sqlQuery.lastError();
+		return false;
+	}
+	qDebug() << "add to DB";
+	getAllMovies();
+	return true;
+}
+
+void DBHandler::getAllMovies() {
+	//QSqlQuery query;
+	//query.exec("select * from t_movies");
+	auto querys = QString("SELECT t_movies.*, group_concat(t_tags.name) "
+		"FROM t_movies "
+		"LEFT JOIN t_unions ON t_movies.id = t_unions.movie_id "
+		"LEFT JOIN t_tags ON t_unions.tag_id = t_tags.id ");
+	QSqlQuery query;
+	if (!query.exec(querys)) {
+		qDebug() << "Error: " << query.lastError();
+		return;
+	}
+	
+	while (query.next()) {
+		QString name = query.value(1).toString();
+		QString path = query.value(2).toString();
+		QString tags = query.value(3).toString();
+		qDebug() << name << path << tags;
+	}
+}
+
+QSqlTableModel* DBHandler::getSqlTableModel() {
+	if (model == nullptr) {
+		model = new QSqlTableModel(nullptr, database);
+		//model->setTable("t_movies");
+		//model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+		//model->select();
+		//model->removeColumn(0); // don't show the ID
+		//model->setHeaderData(0, Qt::Horizontal, QString("Column 1"));
+		//model->setHeaderData(1, Qt::Horizontal, QString("Column 2"));
+	}
+	return model;
+}
+
+QSqlQueryModel* DBHandler::getSqlQueryModel() {
+	if (qmodel == nullptr) {
+		qmodel = new QSqlQueryModel;
+		auto query = QSqlQuery("SELECT M.*, T.name"
+			"FROM t_movies AS M"
+			"LEFT JOIN t_unions  AS U ON M.id = U.movie_id"
+			"LEFT JOIN t_tags AS T ON U.tag_id = T.id ");
+		qmodel->setQuery(query);
+	}
+	return qmodel;
 }
 
 bool DBHandler::openDb(void) {

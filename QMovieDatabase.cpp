@@ -11,7 +11,8 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 	qDebug() << settings.dbPath << settings.playerPath;
 	dbHandler = new DBHandler(settings.dbPath);
 	qDebug() <<  dbHandler->isTableExist(QString("t_movies"));
-
+	movieTable = new MovieTable(ui.tableView);
+	movieTable->bindingModel(dbHandler->getSqlQueryModel());
 }
 
 void QMovieDatabase::on_actionOpenDir_triggered() {
@@ -22,7 +23,7 @@ void QMovieDatabase::on_actionOpenDir_triggered() {
 	if (!dir.isNull()) {
 		// dir 即是选择的文件路径
 		QList<QFileInfo> files = FileOperator::pathWalk(dir);
-		qDebug() << files;
+		dbHandler->addFilesToDB(files);
 	}
 }
 

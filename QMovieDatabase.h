@@ -4,6 +4,7 @@
 #include "ui_QMovieDatabase.h"
 #include "Settings.h"
 #include "DBHandler.h"
+#include "MovieTable.h"
 class QMovieDatabase : public QMainWindow {
 	Q_OBJECT
 
@@ -14,6 +15,7 @@ private:
 	Ui::QMovieDatabaseClass ui;
 	Settings settings;
 	DBHandler* dbHandler;
+	MovieTable* movieTable;
 	// ******* ²Û *******
 public slots:
 	void on_actionOpenDir_triggered();
