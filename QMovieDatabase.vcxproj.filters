@@ -69,8 +69,10 @@
     <ClInclude Include="DBHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MovieTable.h">
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="MovieTable.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
+    </QtMoc>
   </ItemGroup>
 </Project>

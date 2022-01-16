@@ -100,7 +100,7 @@
   <ItemGroup>
     <ClInclude Include="DBHandler.h" />
     <ClInclude Include="FileOperator.h" />
-    <ClInclude Include="MovieTable.h" />
+    <QtMoc Include="MovieTable.h" />
     <ClInclude Include="Settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,5 +1,6 @@
 #include "DBHandler.h"
 #include <QDebug>
+#include <QMessageBox>
 
 DBHandler::DBHandler(QString path) {
 	model = nullptr;
@@ -79,8 +80,7 @@ bool DBHandler::addFilesToDB(QList<QFileInfo> Files) {
 	QVariantList paths;
 	for (QFileInfo file : Files)
 	{
-		qDebug() << file.baseName() << file.absoluteFilePath();
-		filenames << file.baseName();
+		filenames << file.completeBaseName();
 		paths << file.absoluteFilePath();
 	}
 	sqlQuery.addBindValue(filenames);
@@ -90,8 +90,12 @@ bool DBHandler::addFilesToDB(QList<QFileInfo> Files) {
 		qDebug() << "Error: Fail to add files to DB. " << sqlQuery.lastError();
 		return false;
 	}
-	qDebug() << "add to DB";
-	getAllMovies();
+
+	QMessageBox messageBox(QMessageBox::Information,  
+		QStringLiteral("扫描"), QStringLiteral("扫描完成"),
+		NULL, NULL);
+	messageBox.exec();
+	getSqlQueryModel();
 	return true;
 }
 
@@ -133,19 +137,24 @@ QSqlTableModel* DBHandler::getSqlTableModel() {
 }
 
 QSqlQueryModel* DBHandler::getSqlQueryModel() {
+	auto query = QSqlQuery(
+		"SELECT t_movies.id, t_movies.name, group_concat(t_tags.name), t_movies.path "
+		"FROM t_movies "
+		"LEFT JOIN t_unions ON t_movies.id = t_unions.movie_id "
+		"LEFT JOIN t_tags ON t_unions.tag_id = t_tags.id "
+		"GROUP BY t_movies.id");
 	if (qmodel == nullptr) {
 		qmodel = new QSqlQueryModel;
 		// 查询所有的信息，并且把标签信息合并到一起显示
-		auto query = QSqlQuery(
-			"SELECT t_movies.name, group_concat(t_tags.name), t_movies.path "
-			"FROM t_movies "
-			"LEFT JOIN t_unions ON t_movies.id = t_unions.movie_id "
-			"LEFT JOIN t_tags ON t_unions.tag_id = t_tags.id "
-			"GROUP BY t_movies.id");
+		
 		qmodel->setQuery(query);
-		qmodel->setHeaderData(0, Qt::Horizontal, QStringLiteral("电影名称"));
-		qmodel->setHeaderData(1, Qt::Horizontal, QStringLiteral("标签"));
-		qmodel->setHeaderData(2, Qt::Horizontal, QStringLiteral("文件路径"));
+		qmodel->setHeaderData(1, Qt::Horizontal, QStringLiteral("电影名称"));
+		qmodel->setHeaderData(2, Qt::Horizontal, QStringLiteral("标签"));
+		qmodel->setHeaderData(3, Qt::Horizontal, QStringLiteral("文件路径"));
+	}
+	else {
+		// 刷新内容
+		qmodel->setQuery(query);
 	}
 	return qmodel;
 }
