@@ -18,7 +18,6 @@ DBHandler::DBHandler(QString path) {
 	{
 		createTable();
 	}
-	getAllMovies();
 }
 
 void DBHandler::createTable() {
@@ -99,10 +98,13 @@ bool DBHandler::addFilesToDB(QList<QFileInfo> Files) {
 void DBHandler::getAllMovies() {
 	//QSqlQuery query;
 	//query.exec("select * from t_movies");
-	auto querys = QString("SELECT t_movies.*, group_concat(t_tags.name) "
+	// 查询所有的信息，并且把标签信息合并到一起显示
+	auto querys = QString(
+		"SELECT t_movies.*, group_concat(t_tags.name) "
 		"FROM t_movies "
 		"LEFT JOIN t_unions ON t_movies.id = t_unions.movie_id "
-		"LEFT JOIN t_tags ON t_unions.tag_id = t_tags.id ");
+		"LEFT JOIN t_tags ON t_unions.tag_id = t_tags.id "
+		"GROUP BY t_movies.id");
 	QSqlQuery query;
 	if (!query.exec(querys)) {
 		qDebug() << "Error: " << query.lastError();
@@ -133,11 +135,17 @@ QSqlTableModel* DBHandler::getSqlTableModel() {
 QSqlQueryModel* DBHandler::getSqlQueryModel() {
 	if (qmodel == nullptr) {
 		qmodel = new QSqlQueryModel;
-		auto query = QSqlQuery("SELECT M.*, T.name"
-			"FROM t_movies AS M"
-			"LEFT JOIN t_unions  AS U ON M.id = U.movie_id"
-			"LEFT JOIN t_tags AS T ON U.tag_id = T.id ");
+		// 查询所有的信息，并且把标签信息合并到一起显示
+		auto query = QSqlQuery(
+			"SELECT t_movies.name, group_concat(t_tags.name), t_movies.path "
+			"FROM t_movies "
+			"LEFT JOIN t_unions ON t_movies.id = t_unions.movie_id "
+			"LEFT JOIN t_tags ON t_unions.tag_id = t_tags.id "
+			"GROUP BY t_movies.id");
 		qmodel->setQuery(query);
+		qmodel->setHeaderData(0, Qt::Horizontal, QStringLiteral("电影名称"));
+		qmodel->setHeaderData(1, Qt::Horizontal, QStringLiteral("标签"));
+		qmodel->setHeaderData(2, Qt::Horizontal, QStringLiteral("文件路径"));
 	}
 	return qmodel;
 }
