@@ -5,6 +5,8 @@
 #include "QMovieDatabase.h"
 #include "FileOperator.h"
 
+#include <qgridlayout.h>
+
 QMovieDatabase::QMovieDatabase(QWidget* parent)
 	: QMainWindow(parent) {
 	ui.setupUi(this);
@@ -19,6 +21,9 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 	// ÉèÖÃ ±êÇ©É¸Ñ¡Æ÷
 	tagFilter = new TagFilter(ui.listView, dbHandler);
 	connect(dbHandler, SIGNAL(newTagAdded(QString, long)), tagFilter, SLOT(on_tagAdded(QString, long)));
+
+	// test
+	tagFilter->editTags(this);
 }
 
 void QMovieDatabase::on_actionOpenDir_triggered() {

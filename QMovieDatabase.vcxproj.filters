@@ -64,6 +64,12 @@
     <ClCompile Include="CreateTagDiag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TagEdit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickableLabel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileOperator.h">
@@ -73,6 +79,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ui_Dialog_createTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TagEdit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -87,6 +96,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="TagFilter.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ClickableLabel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
