@@ -64,7 +64,7 @@ void DBHandler::createTable() {
 	}
 }
 
-bool DBHandler::isTableExist(QString& tableName) {
+bool DBHandler::isTableExist(QString tableName) {
 	QSqlDatabase database = QSqlDatabase::database();
 	if (database.tables().contains(tableName)) {
 		return true;
@@ -195,6 +195,28 @@ bool DBHandler::createTag(QString tag) {
 		emit newTagAdded(tag, query.lastInsertId().toUInt());
 		return true;
 	}
+}
+
+bool DBHandler::markTags(int movieid, QList<int> tagid) {
+	QSqlQuery sqlQuery;
+	QString insert_sql = "INSERT INTO t_unions (`movie_id`, `tag_id`) VALUES (?, ?)";
+	sqlQuery.prepare(insert_sql);
+	// 批量插入记录
+	QVariantList movie_id;
+	QVariantList tag_id;
+	for (int tid : tagid) {
+		movie_id << movieid;
+		tag_id << tid;
+	}
+	sqlQuery.addBindValue(movie_id);
+	sqlQuery.addBindValue(tag_id);
+
+	if (!sqlQuery.execBatch()) {
+		qDebug() << "Error: Fail to add files to DB. " << sqlQuery.lastError();
+		return false;
+	}
+	getSqlQueryModel();
+	return true;
 }
 
 bool DBHandler::openDb(void) {

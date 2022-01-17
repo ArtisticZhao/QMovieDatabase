@@ -25,4 +25,5 @@ private:
 public slots:
 	void on_actionOpenDir_triggered();
 	void on_pb_addTag_clicked();
+	void on_tagEditTrigger(int movieid, QStringList tags);
 };

@@ -1,11 +1,14 @@
 #include "clickablelabel.h"
 #include <QDebug>
+#include <QLayout>
+
 ClickableLabel::ClickableLabel(QWidget* parent, Qt::WindowFlags f)
 	: QLabel(parent) {
 	isSelected = false;
 }
 
-ClickableLabel::~ClickableLabel() {}
+ClickableLabel::~ClickableLabel() {
+}
 
 void ClickableLabel::mousePressEvent(QMouseEvent* event) {
 	isSelected = !isSelected;
@@ -15,5 +18,4 @@ void ClickableLabel::mousePressEvent(QMouseEvent* event) {
 	else {
 		this->setStyleSheet(""); // Çå³ý±ß¿ò
 	}
-	emit clicked();
 }

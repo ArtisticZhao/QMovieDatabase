@@ -18,13 +18,14 @@ public:
 	// 打开数据库
 	bool openDb(void);
 	// 判断数据表是否存在
-	bool isTableExist(QString& tableName);
+	bool isTableExist(QString tableName);
 	bool addFilesToDB(QList<QFileInfo> Files);
 	void getAllMovies();
 	QSqlTableModel* getSqlTableModel();
 	QSqlQueryModel* getSqlQueryModel();
 	void getTags(QStandardItemModel* tags, QList<int>* tagid);
 	bool createTag(QString tag);
+	bool markTags(int movieid, QList<int> tagid);
 private:
 	QSqlDatabase database;
 	QSqlTableModel* model;

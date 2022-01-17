@@ -10,11 +10,9 @@ class ClickableLabel : public QLabel {
 	
 public:
 	bool isSelected;
+	int tagid;
 	explicit ClickableLabel(QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
 	~ClickableLabel();
-
-signals:
-	void clicked();
 
 protected:
 	void mousePressEvent(QMouseEvent* event);

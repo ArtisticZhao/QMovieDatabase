@@ -8,6 +8,12 @@ MovieTable::MovieTable(QTableView* tableview) {
 
 void MovieTable::on_tableView_double_clicked(const QModelIndex itemIndex) {
 	qDebug() << itemIndex.row() << itemIndex.column();
+	if (itemIndex.column() == 2) {
+		// Ë«»÷±êÇ©
+		auto tagstr = tableView->model()->data(tableView->model()->index(itemIndex.row(), itemIndex.column())).toString();
+		QStringList tags = tagstr.split(",");
+		emit tagEditTrigger(tableView->model()->data(tableView->model()->index(itemIndex.row(), 0)).toInt(), tags);
+	}
 	qDebug() << tableView->model()->data( tableView->model()->index(itemIndex.row(), itemIndex.column()));
 	qDebug() << "movie id is " << tableView->model()->data(tableView->model()->index(itemIndex.row(), 0));
 }

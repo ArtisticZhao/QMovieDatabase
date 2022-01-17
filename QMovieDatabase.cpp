@@ -21,9 +21,9 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 	// ÉèÖÃ ±êÇ©É¸Ñ¡Æ÷
 	tagFilter = new TagFilter(ui.listView, dbHandler);
 	connect(dbHandler, SIGNAL(newTagAdded(QString, long)), tagFilter, SLOT(on_tagAdded(QString, long)));
-
+	connect(movieTable, SIGNAL(tagEditTrigger(int, QStringList)), this, SLOT(on_tagEditTrigger(int, QStringList)));
 	// test
-	tagFilter->editTags(this);
+	
 }
 
 void QMovieDatabase::on_actionOpenDir_triggered() {
@@ -47,6 +47,10 @@ void QMovieDatabase::on_pb_addTag_clicked() {
 		createTag = new CreateTagDiag(this, dbHandler);
 	}
 	
+}
+
+void QMovieDatabase::on_tagEditTrigger(int movieid, QStringList tags) {
+	tagFilter->editTags(this, movieid, tags);
 }
 
 QMovieDatabase::~QMovieDatabase() {
