@@ -1,6 +1,11 @@
 #include "FileOperator.h"
 #include <QProcess>
+#include <qDebug>
 
+
+FileOperator::FileOperator(Settings* settings) {
+	this->settings = settings;
+}
 
 //************************************
 // Method:      pathWalk
@@ -12,8 +17,14 @@
 // Parameter:   QString dirpath
 //************************************
 QList<QFileInfo> FileOperator::pathWalk(QString dirpath) {
+	// 从设置中读取后缀名列表
 	QStringList nameFilters;
-	nameFilters << "*.*";
+	QString filter = settings->fileFilter;
+	QStringList filters = filter.split(' ');
+	for (QString ft : filters)
+	{
+		nameFilters << QString("*.%1").arg(ft);
+	}
 	QDirIterator iter(dirpath, nameFilters,
 		QDir::Files | QDir::NoSymLinks,
 		QDirIterator::Subdirectories);
@@ -30,5 +41,6 @@ QList<QFileInfo> FileOperator::pathWalk(QString dirpath) {
 
 void FileOperator::runPlayer(QStringList paths) {
 	paths.append(" /add");
-	QProcess::startDetached("C:\\Program Files\\DAUM\\PotPlayer\\PotPlayerMini64.exe", paths);
+	qDebug() << paths;
+	QProcess::startDetached(settings->playerPath, paths);
 }

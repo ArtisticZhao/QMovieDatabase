@@ -100,7 +100,14 @@
     </property>
     <addaction name="actionOpenDir"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>播放</string>
+    </property>
+    <addaction name="actionPlayAll"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -114,6 +121,11 @@
   <action name="actionOpenDir">
    <property name="text">
     <string>打开目录...</string>
+   </property>
+  </action>
+  <action name="actionPlayAll">
+   <property name="text">
+    <string>播放全部</string>
    </property>
   </action>
  </widget>

@@ -107,7 +107,7 @@
     <QtMoc Include="ClickableLabel.h" />
     <ClInclude Include="TagEdit.h" />
     <QtMoc Include="TagEditDiag.h" />
-    <ClInclude Include="Ui_Dialog_createTag.h" />
+    <ClInclude Include="ui_createTag.h" />
     <QtMoc Include="CreateTagDiag.h" />
     <QtMoc Include="DBHandler.h" />
     <QtMoc Include="FileOperator.h" />

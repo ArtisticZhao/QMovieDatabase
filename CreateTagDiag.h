@@ -1,6 +1,6 @@
 #pragma once
 #include <QtWidgets/QDialog>
-#include "Ui_Dialog_createTag.h"
+#include "ui_createTag.h"
 #include "DBHandler.h"
 
 class CreateTagDiag : public QDialog {
@@ -14,4 +14,3 @@ private:
 private slots:
 	void on_buttonBox_accepted();
 };
-

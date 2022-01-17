@@ -4,11 +4,17 @@
 #include <qdir.h>
 #include <QDirIterator>
 
+#include "Settings.h"
+
 class FileOperator : public QObject{
 	Q_OBJECT
 
+private:
+	Settings* settings;
+
 public:
-	static QList<QFileInfo> pathWalk(QString dirpath);
+	FileOperator(Settings* settings);
+	QList<QFileInfo> pathWalk(QString dirpath);
 
 public slots:
 	void runPlayer(QStringList paths);

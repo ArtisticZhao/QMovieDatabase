@@ -17,7 +17,7 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 	// 设置 movie table 界面
 	movieTable = new MovieTable(ui.tableView);
 	movieTable->bindingModel(dbHandler->getSqlQueryModel());
-	foperator = new FileOperator();
+	foperator = new FileOperator(&settings);
 	// 设置 标签筛选器
 	tagFilter = new TagFilter(ui.listView, dbHandler, ui.rb_selectModeAnd);
 	connect(dbHandler, SIGNAL(newTagAdded(QString, long)), tagFilter, SLOT(on_tagAdded(QString, long)));
@@ -33,9 +33,18 @@ void QMovieDatabase::on_actionOpenDir_triggered() {
 
 	if (!dir.isNull()) {
 		// dir 即是选择的文件路径
-		QList<QFileInfo> files = FileOperator::pathWalk(dir);
+		QList<QFileInfo> files = foperator->pathWalk(dir);
 		dbHandler->addFilesToDB(files);
 	}
+}
+
+void QMovieDatabase::on_actionPlayAll_triggered() {
+	QStringList paths;
+	for (int i=0 ;i<ui.tableView->model()->rowCount(); i++)
+	{
+		paths << QString("\"%1\"").arg(ui.tableView->model()->data(ui.tableView->model()->index(i, 3)).toString());
+	}
+	movieTable->runPlayer(paths);
 }
 
 void QMovieDatabase::on_pb_addTag_clicked() {
@@ -57,4 +66,5 @@ QMovieDatabase::~QMovieDatabase() {
 	delete dbHandler;
 	delete movieTable;
 	delete tagFilter;
+	delete foperator;
 }

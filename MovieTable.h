@@ -15,6 +15,7 @@ public:
 	MovieTable(QTableView* tableview);
 	void bindingModel(QSqlTableModel* model);
 	void bindingModel(QSqlQueryModel* model);
+	void runPlayer(QStringList qs);
 private:
 	QTableView* tableView;
 };

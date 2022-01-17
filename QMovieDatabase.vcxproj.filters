@@ -78,10 +78,10 @@
     <ClInclude Include="Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ui_Dialog_createTag.h">
+    <ClInclude Include="TagEdit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TagEdit.h">
+    <ClInclude Include="ui_createTag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
