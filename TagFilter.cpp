@@ -19,6 +19,30 @@ void TagFilter::on_tagSelected(int movieid, QList<int> tagids) {
 	dbHandler->markTags(movieid, tagids);
 }
 
+void TagFilter::on_listView_clicked(const QModelIndex& index) {
+	int id_index = tagid.at(index.row());
+	if (tagsModel->item(index.row(), 0)->checkState()) {
+		// 勾选了项目
+		if (std::find(selectedTagId.begin(), selectedTagId.end(), id_index) == selectedTagId.end()) {
+			// 没有选中
+			selectedTagId.append(id_index);
+			// 触发筛选
+			dbHandler->setModelFilter(selectedTagId);
+		}
+	}
+	else {
+		if (selectedTagId.removeOne(id_index)) {
+			// 移除成功！说明曾经选中了这个标签，所以需要更新筛选器
+			dbHandler->setModelFilter(selectedTagId);
+		}
+	}
+	
+}
+
+void TagFilter::on_tagsModelstatechanged(QStandardItem* item) {
+	qDebug() << item->index();
+}
+
 TagFilter::TagFilter(QListView* listView, DBHandler* dbHandler) {
 	tagsModel = nullptr;
 	qd = nullptr;
@@ -28,6 +52,9 @@ TagFilter::TagFilter(QListView* listView, DBHandler* dbHandler) {
 	tagsModel = new QStandardItemModel();
 	dbHandler->getTags(tagsModel, &tagid);
 	this->listView->setModel(tagsModel);
+	
+	connect(listView, SIGNAL(clicked(const QModelIndex)), this, SLOT(on_listView_clicked(const QModelIndex)));
+	connect(tagsModel, SIGNAL(itemChanged(QStandardItem * item)), this, SLOT(on_tagsModelstatechanged(QStandardItem * item)));
 }
 
 void TagFilter::editTags(QWidget* parent, int movid, QStringList tags) {

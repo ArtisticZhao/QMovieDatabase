@@ -219,6 +219,50 @@ bool DBHandler::markTags(int movieid, QList<int> tagid) {
 	return true;
 }
 
+bool DBHandler::setModelFilter(QList<int> selectTagId) {
+	if (qmodel == nullptr) return false;
+	if (selectTagId.size()==0) {
+		// 筛选标签为空, 重置筛选器
+		getSqlQueryModel();
+		return true;
+	}
+#ifdef DEBUG
+	// 查询只要包含的标签
+	QString sub_query = QString("%1").arg(selectTagId.at(0));
+	for (int i = 1; i < selectTagId.size(); i++) {
+		sub_query += QString(",%1").arg(selectTagId.at(i));
+	}
+	qDebug() << sub_query;
+	auto query = QSqlQuery(
+		QString("SELECT t_movies.id, t_movies.name, group_concat(t_tags.name), t_movies.path "
+			"FROM t_movies "
+			"LEFT JOIN t_unions ON t_movies.id = t_unions.movie_id "
+			"LEFT JOIN t_tags ON t_unions.tag_id = t_tags.id "
+			"WHERE t_movies.id IN ("
+			"SELECT movie_id FROM t_unions WHERE tag_id IN (%1)"
+			")"
+			"GROUP BY t_movies.id").arg(sub_query));
+	
+#endif // 0
+	QString sub_query = QString("SELECT movie_id FROM t_unions WHERE tag_id = %1").arg(selectTagId.at(0));
+	for (int i = 1; i < selectTagId.size(); i++) {
+		sub_query += QString(" INTERSECT SELECT movie_id FROM t_unions WHERE tag_id = %1").arg(selectTagId.at(i));
+	}
+	auto query = QSqlQuery(
+		QString("SELECT t_movies.id, t_movies.name, group_concat(t_tags.name), t_movies.path "
+			"FROM t_movies "
+			"LEFT JOIN t_unions ON t_movies.id = t_unions.movie_id "
+			"LEFT JOIN t_tags ON t_unions.tag_id = t_tags.id "
+			"WHERE t_movies.id IN ("
+			"%1"
+			")"
+			"GROUP BY t_movies.id").arg(sub_query));
+	qDebug() << sub_query;
+	qmodel->setQuery(query);
+	return true;
+	
+}
+
 bool DBHandler::openDb(void) {
 	if (!database.open()) {
 		qDebug() << "Error: Failed to connect database." << database.lastError();
