@@ -39,10 +39,6 @@ void TagFilter::on_listView_clicked(const QModelIndex& index) {
 	
 }
 
-void TagFilter::on_tagsModelstatechanged(QStandardItem* item) {
-	qDebug() << item->index();
-}
-
 TagFilter::TagFilter(QListView* listView, DBHandler* dbHandler, QRadioButton* rb) {
 	tagsModel = nullptr;
 	qd = nullptr;
@@ -55,7 +51,6 @@ TagFilter::TagFilter(QListView* listView, DBHandler* dbHandler, QRadioButton* rb
 	this->listView->setModel(tagsModel);
 	
 	connect(listView, SIGNAL(clicked(const QModelIndex)), this, SLOT(on_listView_clicked(const QModelIndex)));
-	connect(tagsModel, SIGNAL(itemChanged(QStandardItem * item)), this, SLOT(on_tagsModelstatechanged(QStandardItem * item)));
 }
 
 void TagFilter::editTags(QWidget* parent, int movid, QStringList tags) {

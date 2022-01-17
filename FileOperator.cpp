@@ -1,5 +1,5 @@
 #include "FileOperator.h"
-
+#include <QProcess>
 
 
 //************************************
@@ -25,4 +25,10 @@ QList<QFileInfo> FileOperator::pathWalk(QString dirpath) {
 	}
 
 	return files;
+}
+
+
+void FileOperator::runPlayer(QStringList paths) {
+	paths.append(" /add");
+	QProcess::startDetached("C:\\Program Files\\DAUM\\PotPlayer\\PotPlayerMini64.exe", paths);
 }

@@ -3,9 +3,8 @@
 #include <QStandardPaths>
 
 #include "QMovieDatabase.h"
-#include "FileOperator.h"
 
-#include <qgridlayout.h>
+
 
 QMovieDatabase::QMovieDatabase(QWidget* parent)
 	: QMainWindow(parent) {
@@ -18,11 +17,12 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 	// 设置 movie table 界面
 	movieTable = new MovieTable(ui.tableView);
 	movieTable->bindingModel(dbHandler->getSqlQueryModel());
+	foperator = new FileOperator();
 	// 设置 标签筛选器
 	tagFilter = new TagFilter(ui.listView, dbHandler, ui.rb_selectModeAnd);
 	connect(dbHandler, SIGNAL(newTagAdded(QString, long)), tagFilter, SLOT(on_tagAdded(QString, long)));
 	connect(movieTable, SIGNAL(tagEditTrigger(int, QStringList)), this, SLOT(on_tagEditTrigger(int, QStringList)));
-	// test
+	connect(movieTable, SIGNAL(runPlayerTrigger(QStringList)), foperator, SLOT(runPlayer(QStringList)));
 	
 }
 

@@ -110,7 +110,7 @@
     <ClInclude Include="Ui_Dialog_createTag.h" />
     <QtMoc Include="CreateTagDiag.h" />
     <QtMoc Include="DBHandler.h" />
-    <ClInclude Include="FileOperator.h" />
+    <QtMoc Include="FileOperator.h" />
     <QtMoc Include="TagFilter.h" />
     <QtMoc Include="MovieTable.h" />
     <ClInclude Include="Settings.h" />

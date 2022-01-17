@@ -8,6 +8,7 @@ class MovieTable : public QObject{
 	Q_OBJECT
 signals:
 	void tagEditTrigger(int movieid, QStringList tags);  //双击 标签时发出的信号, 由mainwindow接收
+	void runPlayerTrigger(QStringList paths);
 public slots:
 	void on_tableView_double_clicked(const QModelIndex);
 public:

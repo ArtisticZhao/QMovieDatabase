@@ -1,6 +1,7 @@
 #include "MovieTable.h"
 #include <QDebug>
 
+
 MovieTable::MovieTable(QTableView* tableview) {
 	this->tableView = tableview;
 	connect(tableView, SIGNAL(doubleClicked(const QModelIndex)), this, SLOT(on_tableView_double_clicked(const QModelIndex)));
@@ -14,8 +15,12 @@ void MovieTable::on_tableView_double_clicked(const QModelIndex itemIndex) {
 		QStringList tags = tagstr.split(",");
 		emit tagEditTrigger(tableView->model()->data(tableView->model()->index(itemIndex.row(), 0)).toInt(), tags);
 	}
-	qDebug() << tableView->model()->data( tableView->model()->index(itemIndex.row(), itemIndex.column()));
-	qDebug() << "movie id is " << tableView->model()->data(tableView->model()->index(itemIndex.row(), 0));
+	else {
+		//qDebug() << tableView->model()->data(tableView->model()->index(itemIndex.row(), itemIndex.column()));  // 当前双击
+		// 启动播放器
+		emit runPlayerTrigger(QStringList(tableView->model()->data(tableView->model()->index(itemIndex.row(), 3)).toString()));
+	}
+	
 }
 
 void MovieTable::bindingModel(QSqlTableModel* model) {

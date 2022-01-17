@@ -3,10 +3,13 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_QMovieDatabase.h"
 #include "Settings.h"
+#include "FileOperator.h"
 #include "DBHandler.h"
 #include "MovieTable.h"
 #include "TagFilter.h"
 #include "CreateTagDiag.h"
+
+
 
 class QMovieDatabase : public QMainWindow {
 	Q_OBJECT
@@ -21,6 +24,7 @@ private:
 	MovieTable* movieTable;
 	TagFilter* tagFilter;
 	CreateTagDiag* createTag;
+	FileOperator* foperator;
 	// ******* ²Û *******
 public slots:
 	void on_actionOpenDir_triggered();
