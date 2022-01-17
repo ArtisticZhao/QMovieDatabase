@@ -1,6 +1,7 @@
 #pragma once
 #include <QListView>
 #include <QStandardItemModel>
+#include <QRadioButton>
 
 #include "TagEditDiag.h"
 #include "DBHandler.h"
@@ -15,12 +16,13 @@ public slots:
 private:
 	QListView* listView;
 	DBHandler* dbHandler;
+	QRadioButton* rb_selectModeAnd;
 	QList<int> tagid;
 	QStandardItemModel* tagsModel;
 	TagEditDiag* qd;
 	QList<int> selectedTagId;
 public:
-	TagFilter(QListView*, DBHandler*);
+	TagFilter(QListView*, DBHandler*, QRadioButton*);
 	void editTags(QWidget* parent, int movid, QStringList tags);
 
 };

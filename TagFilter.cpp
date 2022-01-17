@@ -27,13 +27,13 @@ void TagFilter::on_listView_clicked(const QModelIndex& index) {
 			// 没有选中
 			selectedTagId.append(id_index);
 			// 触发筛选
-			dbHandler->setModelFilter(selectedTagId);
+			dbHandler->setModelFilter(selectedTagId, rb_selectModeAnd->isChecked());
 		}
 	}
 	else {
 		if (selectedTagId.removeOne(id_index)) {
 			// 移除成功！说明曾经选中了这个标签，所以需要更新筛选器
-			dbHandler->setModelFilter(selectedTagId);
+			dbHandler->setModelFilter(selectedTagId, rb_selectModeAnd->isChecked());
 		}
 	}
 	
@@ -43,11 +43,12 @@ void TagFilter::on_tagsModelstatechanged(QStandardItem* item) {
 	qDebug() << item->index();
 }
 
-TagFilter::TagFilter(QListView* listView, DBHandler* dbHandler) {
+TagFilter::TagFilter(QListView* listView, DBHandler* dbHandler, QRadioButton* rb) {
 	tagsModel = nullptr;
 	qd = nullptr;
 	this->listView = listView;
 	this->dbHandler = dbHandler;
+	this->rb_selectModeAnd = rb;
 	// show tags
 	tagsModel = new QStandardItemModel();
 	dbHandler->getTags(tagsModel, &tagid);

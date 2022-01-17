@@ -19,7 +19,7 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 	movieTable = new MovieTable(ui.tableView);
 	movieTable->bindingModel(dbHandler->getSqlQueryModel());
 	// …Ë÷√ ±Í«©…∏—°∆˜
-	tagFilter = new TagFilter(ui.listView, dbHandler);
+	tagFilter = new TagFilter(ui.listView, dbHandler, ui.rb_selectModeAnd);
 	connect(dbHandler, SIGNAL(newTagAdded(QString, long)), tagFilter, SLOT(on_tagAdded(QString, long)));
 	connect(movieTable, SIGNAL(tagEditTrigger(int, QStringList)), this, SLOT(on_tagEditTrigger(int, QStringList)));
 	// test

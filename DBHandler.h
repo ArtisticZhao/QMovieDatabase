@@ -26,7 +26,7 @@ public:
 	void getTags(QStandardItemModel* tags, QList<int>* tagid);
 	bool createTag(QString tag);
 	bool markTags(int movieid, QList<int> tagid);
-	bool setModelFilter(QList<int> selectTagId);
+	bool setModelFilter(QList<int> selectTagId, bool isAnd);
 private:
 	QSqlDatabase database;
 	QSqlTableModel* model;
