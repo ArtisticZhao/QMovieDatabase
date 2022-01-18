@@ -42,7 +42,11 @@ void QMovieDatabase::on_actionPlayAll_triggered() {
 	QStringList paths;
 	for (int i=0 ;i<ui.tableView->model()->rowCount(); i++)
 	{
-		paths << QString("\"%1\"").arg(ui.tableView->model()->data(ui.tableView->model()->index(i, 3)).toString());
+		/*QString onepath;
+		onepath.append('"');
+		onepath.append(ui.tableView->model()->data(ui.tableView->model()->index(i, 3)).toString());
+		onepath.append('"');*/
+		paths << ui.tableView->model()->data(ui.tableView->model()->index(i, 3)).toString();
 	}
 	movieTable->runPlayer(paths);
 }

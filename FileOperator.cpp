@@ -40,7 +40,12 @@ QList<QFileInfo> FileOperator::pathWalk(QString dirpath) {
 
 
 void FileOperator::runPlayer(QStringList paths) {
-	paths.append(" /add");
-	qDebug() << paths;
-	QProcess::startDetached(settings->playerPath, paths);
+	for (QString path : paths)
+	{
+		auto qsl = QStringList(path);
+		qsl << "/add";
+		qsl << "/current";
+		qDebug() << path;
+		QProcess::startDetached(settings->playerPath, qsl);
+	}
 }
