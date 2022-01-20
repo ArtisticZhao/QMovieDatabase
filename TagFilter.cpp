@@ -39,6 +39,17 @@ void TagFilter::on_listView_clicked(const QModelIndex& index) {
 	
 }
 
+void TagFilter::on_ItemChanged(QStandardItem* item) {
+	auto index = tagsModel->indexFromItem(item).row();
+	if (tagid.size() < index) return;
+
+	int tagChangedID = tagid.at(index);
+
+	dbHandler->editTag(tagChangedID, item->text());
+	// 变更名字后刷新
+	dbHandler->setModelFilter(selectedTagId, rb_selectModeAnd->isChecked());
+}
+
 TagFilter::TagFilter(QListView* listView, DBHandler* dbHandler, QRadioButton* rb) {
 	tagsModel = nullptr;
 	qd = nullptr;
@@ -49,8 +60,10 @@ TagFilter::TagFilter(QListView* listView, DBHandler* dbHandler, QRadioButton* rb
 	tagsModel = new QStandardItemModel();
 	dbHandler->getTags(tagsModel, &tagid);
 	this->listView->setModel(tagsModel);
-	
+	// tagFilter 单击事件, 判断是否进行筛选
 	connect(listView, SIGNAL(clicked(const QModelIndex)), this, SLOT(on_listView_clicked(const QModelIndex)));
+	//
+	connect(tagsModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(on_ItemChanged(QStandardItem *)));
 }
 
 void TagFilter::editTags(QWidget* parent, int movid, QStringList tags) {

@@ -125,18 +125,6 @@ void DBHandler::getAllMovies() {
 	}
 }
 
-QSqlTableModel* DBHandler::getSqlTableModel() {
-	if (model == nullptr) {
-		model = new QSqlTableModel(nullptr, database);
-		//model->setTable("t_movies");
-		//model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-		//model->select();
-		//model->removeColumn(0); // don't show the ID
-		//model->setHeaderData(0, Qt::Horizontal, QString("Column 1"));
-		//model->setHeaderData(1, Qt::Horizontal, QString("Column 2"));
-	}
-	return model;
-}
 
 QSqlQueryModel* DBHandler::getSqlQueryModel() {
 	// 查询所有的信息，并且把标签信息合并到一起显示
@@ -197,6 +185,17 @@ bool DBHandler::createTag(QString tag) {
 	}
 }
 
+bool DBHandler::editTag(int id, QString tagName) {
+	QString sql = QString("UPDATE t_tags SET name=\"%1\" WHERE id=%2;").arg(tagName).arg(id);
+	QSqlQuery query;
+	if (!query.exec(sql)) {
+		qDebug() << "Error: " << query.lastError();
+		return false;
+	}
+	return true;
+}
+
+// 为电影打标签
 bool DBHandler::markTags(int movieid, QList<int> tagid) {
 	QSqlQuery sqlQuery;
 	QString insert_sql = "INSERT INTO t_unions (`movie_id`, `tag_id`) VALUES (?, ?)";

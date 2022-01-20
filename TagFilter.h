@@ -12,6 +12,7 @@ public slots:
 	void on_tagAdded(QString name, long id);
 	void on_tagSelected(int movieid, QList<int> tagids);
 	void on_listView_clicked(const QModelIndex& index);
+	void on_ItemChanged(QStandardItem* item);
 
 private:
 	QListView* listView;

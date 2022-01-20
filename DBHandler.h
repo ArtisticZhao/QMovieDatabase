@@ -21,10 +21,10 @@ public:
 	bool isTableExist(QString tableName);
 	bool addFilesToDB(QList<QFileInfo> Files);
 	void getAllMovies();
-	QSqlTableModel* getSqlTableModel();
 	QSqlQueryModel* getSqlQueryModel();
 	void getTags(QStandardItemModel* tags, QList<int>* tagid);
 	bool createTag(QString tag);
+	bool editTag(int id, QString tagName);
 	bool markTags(int movieid, QList<int> tagid);
 	bool setModelFilter(QList<int> selectTagId, bool isAnd);
 private:
