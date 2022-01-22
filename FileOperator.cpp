@@ -1,6 +1,7 @@
 #include "FileOperator.h"
 #include <QProcess>
 #include <qDebug>
+#include <QThread>
 
 
 FileOperator::FileOperator(Settings* settings) {
@@ -43,9 +44,14 @@ void FileOperator::runPlayer(QStringList paths) {
 	for (QString path : paths)
 	{
 		auto qsl = QStringList(path);
-		qsl << "/add";
-		qsl << "/current";
-		qDebug() << path;
+		if (paths.size()>1)  // 如果只有一条path，就直接播放
+		{
+			qsl << "/add";
+		}
+		else {
+			qsl << "/current";
+		}
 		QProcess::startDetached(settings->playerPath, qsl);
+		QThread::msleep(50);
 	}
 }
