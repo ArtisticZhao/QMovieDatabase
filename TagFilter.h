@@ -10,7 +10,8 @@ class TagFilter : public QObject {
 	Q_OBJECT
 public slots:
 	void on_tagAdded(QString name, long id);
-	void on_tagSelected(int movieid, QList<int> tagids);
+	void on_tagPreselected(int movieid, QList<int> tagids);
+	void on_tagPreremoved(int movieid, QList<int> tagids);
 	void on_listView_clicked(const QModelIndex& index);
 	void on_ItemChanged(QStandardItem* item);
 

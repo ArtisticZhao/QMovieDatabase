@@ -1,6 +1,5 @@
 #include "TagFilter.h"
 #include <QDebug>
-
 #include <QGridLayout>
 #include "ClickableLabel.h"
 
@@ -13,10 +12,13 @@ void TagFilter::on_tagAdded(QString name, long id) {
 	tagid.append(id);
 }
 
-void TagFilter::on_tagSelected(int movieid, QList<int> tagids) {
-	qDebug() << movieid << tagids;
+void TagFilter::on_tagPreselected(int movieid, QList<int> tagids) {
 	// save to db;
 	dbHandler->markTags(movieid, tagids);
+}
+
+void TagFilter::on_tagPreremoved(int movieid, QList<int> tagids) {
+	dbHandler->earseTags(movieid, tagids);
 }
 
 void TagFilter::on_listView_clicked(const QModelIndex& index) {
@@ -66,28 +68,9 @@ TagFilter::TagFilter(QListView* listView, DBHandler* dbHandler, QRadioButton* rb
 	connect(tagsModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(on_ItemChanged(QStandardItem *)));
 }
 
+// 创建编辑影片tags窗口
 void TagFilter::editTags(QWidget* parent, int movid, QStringList tags) {
-#define COLS 4
-	qd = new TagEditDiag();
-	qd->setParent(parent);
-	qd->movieid = movid;
-	qd->setAttribute(Qt::WA_DeleteOnClose);
-	QList<QLabel*> tagLabels;
-	QGridLayout* gridLayout = new QGridLayout();
-	for (int i=0; i<tagid.size(); i++)
-	{
-		ClickableLabel* label = new ClickableLabel(qd);
-		label->setText(tagsModel->item(i)->text());
-		label->tagid = tagid.at(i);
-		label->adjustSize();
-		
-		gridLayout->addWidget(label, i / COLS, i % COLS);
-	}
-	qd->setLayout(gridLayout);
-	// 禁止子窗口关闭前操作主窗口
-	Qt::WindowFlags flags = Qt::Dialog;
-	qd->setWindowFlags(flags);
-	qd->setWindowModality(Qt::ApplicationModal);
-	connect(qd, SIGNAL(tagSelected(int, QList<int>)), this, SLOT(on_tagSelected(int, QList<int>)));
-	qd->show();
+	qd = new TagEditDiag(parent, movid, tags, tagid, tagsModel);
+	connect(qd, SIGNAL(tagPreselected(int, QList<int>)), this, SLOT(on_tagPreselected(int, QList<int>)));
+	connect(qd, SIGNAL(tagPreremoved(int, QList<int>)), this, SLOT(on_tagPreremoved(int, QList<int>)));
 }

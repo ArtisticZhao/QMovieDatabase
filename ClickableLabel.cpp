@@ -10,6 +10,16 @@ ClickableLabel::ClickableLabel(QWidget* parent, Qt::WindowFlags f)
 ClickableLabel::~ClickableLabel() {
 }
 
+void ClickableLabel::setCheck(bool status) {
+	isSelected = status;
+	if (isSelected) {
+		this->setStyleSheet("QLabel{border:2px solid rgb(0, 105, 246);}"); // 设置边框表示选择
+	}
+	else {
+		this->setStyleSheet(""); // 清除边框
+	}
+}
+
 void ClickableLabel::mousePressEvent(QMouseEvent* event) {
 	isSelected = !isSelected;
 	if (isSelected) {

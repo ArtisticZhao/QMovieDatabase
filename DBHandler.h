@@ -26,6 +26,7 @@ public:
 	bool createTag(QString tag);
 	bool editTag(int id, QString tagName);
 	bool markTags(int movieid, QList<int> tagid);
+	bool earseTags(int movieid, QList<int> tagid);
 	bool setModelFilter(QList<int> selectTagId, bool isAnd);
 private:
 	QSqlDatabase database;

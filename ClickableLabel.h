@@ -14,6 +14,8 @@ public:
 	explicit ClickableLabel(QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
 	~ClickableLabel();
 
+	void setCheck(bool status);
+
 protected:
 	void mousePressEvent(QMouseEvent* event);
 };

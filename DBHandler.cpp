@@ -218,6 +218,20 @@ bool DBHandler::markTags(int movieid, QList<int> tagid) {
 	return true;
 }
 
+// 将电影打好的标签移除
+bool DBHandler::earseTags(int movieid, QList<int> tagid) {
+	// DELETE FROM t_unions WHERE movie_id=1 AND tag_id=1;
+	QSqlQuery sqlQuery;
+	for (int tid: tagid){
+		if (!sqlQuery.exec(QString("DELETE FROM t_unions WHERE movie_id=%1 AND tag_id=%2").arg(movieid).arg(tid))) {
+			qDebug() << "Error: Fail to erase tag from movie. " << sqlQuery.lastError();
+			return false;
+		}
+	}
+	getSqlQueryModel();
+	return true;
+}
+
 bool DBHandler::setModelFilter(QList<int> selectTagId, bool isAnd) {
 	if (qmodel == nullptr) return false;
 	if (selectTagId.size()==0) {
