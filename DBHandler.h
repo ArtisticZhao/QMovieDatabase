@@ -15,10 +15,10 @@ signals:
 public:
 	DBHandler(QString path);
 	void createTable();
-	// 打开数据库
-	bool openDb(void);
-	// 判断数据表是否存在
-	bool isTableExist(QString tableName);
+	bool updateTable();
+	bool openDb(void);  // 打开数据库
+	bool isTableExist(QString tableName); // 判断数据表是否存在
+	int  isFieldExist(QString tableName, QString fieldName); 
 	bool addFilesToDB(QList<QFileInfo> Files);
 	void getAllMovies();
 	QSqlQueryModel* getSqlQueryModel();

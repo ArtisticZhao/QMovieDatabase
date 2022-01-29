@@ -1,6 +1,7 @@
 #include "DBHandler.h"
 #include <QDebug>
 #include <QMessageBox>
+#include <QSqlRecord>
 
 
 DBHandler::DBHandler(QString path) {
@@ -20,6 +21,7 @@ DBHandler::DBHandler(QString path) {
 	{
 		createTable();
 	}
+	updateTable();
 }
 
 void DBHandler::createTable() {
@@ -29,7 +31,8 @@ void DBHandler::createTable() {
 		"CREATE TABLE t_movies("\
 		"id INTEGER PRIMARY KEY AUTOINCREMENT,"\
 		"name TEXT,"\
-		"path TEXT"\
+		"path TEXT,"\
+		"rank INTEGER DEFAULT 0"\
 		");"
 	;
 	if (!sqlQuery.exec(query)) {
@@ -64,12 +67,58 @@ void DBHandler::createTable() {
 	}
 }
 
+bool DBHandler::updateTable() {
+	if (isFieldExist("t_movies", "rank") == -1) {
+		// 字段不存在
+		qDebug() << "rank not exist";
+		QSqlQuery query;
+		if (!query.exec("ALTER TABLE t_movies ADD COLUMN rank INTEGER DEFAULT 0")) {
+			qDebug() << "Error: Fail to add column 'rank'. " << query.lastError();
+			return false;
+		}
+	}
+	return true;
+}
+
 bool DBHandler::isTableExist(QString tableName) {
 	QSqlDatabase database = QSqlDatabase::database();
 	if (database.tables().contains(tableName)) {
 		return true;
 	}
 	return false;
+}
+
+int DBHandler::isFieldExist(QString tableName, QString fieldName) {
+	QSqlQuery query;
+	QString strSql = QString("SELECT * FROM SQLITE_MASTER WHERE TYPE='table' AND NAME='%1'").arg(tableName);
+	if (query.exec(strSql)) {
+		if (query.next())//表存在
+		{
+			strSql = QString("SELECT * FROM %2").arg(tableName);
+			if (query.exec(strSql)) {
+				QSqlRecord record = query.record();
+				int index = record.indexOf(fieldName);
+				if (index == -1) {
+					return -1;
+				}
+				else {
+					return 1;
+				}
+			}
+			else {
+				qWarning() << __FUNCTION__ << "sql:" << strSql << ",lastError:" << query.lastError().text();
+				return -2;
+			}
+		}
+		else//表不存在
+		{
+			return 0;
+		}
+	}
+	else {
+		qWarning() << __FUNCTION__ << "sql:" << strSql << ",lastError:" << query.lastError().text();
+		return -2;
+	}
 }
 
 bool DBHandler::addFilesToDB(QList<QFileInfo> Files) {

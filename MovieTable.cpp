@@ -31,6 +31,7 @@ void MovieTable::bindingModel(QSqlQueryModel* model) {
 	this->tableView->setModel(model);
 	// вўВиidСа
 	this->tableView->setColumnHidden(0, true);
+	
 }
 
 void MovieTable::runPlayer(QStringList qs) {
