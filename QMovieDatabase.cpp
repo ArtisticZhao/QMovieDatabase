@@ -15,7 +15,7 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 	// 加载DB
 	dbHandler = new DBHandler(settings.dbPath);
 	// 设置 movie table 界面
-	movieTable = new MovieTable(ui.tableView);
+	movieTable = new MovieTable(ui.tableView, dbHandler);
 	movieTable->bindingModel(dbHandler->getSqlQueryModel());
 	foperator = new FileOperator(&settings);
 	// 设置 标签筛选器

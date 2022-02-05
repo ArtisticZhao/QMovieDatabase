@@ -1,5 +1,6 @@
 #include "StarEditor.h"
 #include <QMouseEvent>
+#include <qDebug>
 
 StarEditor::StarEditor(QWidget* parent)
 	: QWidget(parent) {

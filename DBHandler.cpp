@@ -3,6 +3,8 @@
 #include <QMessageBox>
 #include <QSqlRecord>
 
+#include "MovieTableColumIndex.h"
+
 
 DBHandler::DBHandler(QString path) {
 	model = nullptr;
@@ -174,8 +176,7 @@ void DBHandler::getAllMovies() {
 	}
 }
 
-
-QSqlQueryModel* DBHandler::getSqlQueryModel() {
+SqlQueryModel* DBHandler::getSqlQueryModel() {
 	// 查询所有的信息，并且把标签信息合并到一起显示
 	auto query = QSqlQuery(
 		"SELECT t_movies.id, t_movies.name, group_concat(t_tags.name), t_movies.rank, t_movies.path "
@@ -184,12 +185,12 @@ QSqlQueryModel* DBHandler::getSqlQueryModel() {
 		"LEFT JOIN t_tags ON t_unions.tag_id = t_tags.id "
 		"GROUP BY t_movies.id");
 	if (qmodel == nullptr) {
-		qmodel = new QSqlQueryModel;
+		qmodel = new SqlQueryModel;
 		qmodel->setQuery(query);
-		qmodel->setHeaderData(1, Qt::Horizontal, QStringLiteral("电影名称"));
-		qmodel->setHeaderData(2, Qt::Horizontal, QStringLiteral("标签"));
-		qmodel->setHeaderData(3, Qt::Horizontal, QStringLiteral("星级"));
-		qmodel->setHeaderData(4, Qt::Horizontal, QStringLiteral("文件路径"));
+		qmodel->setHeaderData(static_cast<int>(MovieTableColumIndex::Name), Qt::Horizontal, QStringLiteral("电影名称"));
+		qmodel->setHeaderData(static_cast<int>(MovieTableColumIndex::Tag), Qt::Horizontal, QStringLiteral("标签"));
+		qmodel->setHeaderData(static_cast<int>(MovieTableColumIndex::Rank), Qt::Horizontal, QStringLiteral("星级"));
+		qmodel->setHeaderData(static_cast<int>(MovieTableColumIndex::Path), Qt::Horizontal, QStringLiteral("文件路径"));
 	}
 	else {
 		// 刷新内容
@@ -277,6 +278,17 @@ bool DBHandler::earseTags(int movieid, QList<int> tagid) {
 			qDebug() << "Error: Fail to erase tag from movie. " << sqlQuery.lastError();
 			return false;
 		}
+	}
+	getSqlQueryModel();
+	return true;
+}
+
+bool DBHandler::updateRank(int movieid, int rank) {
+	QString sql = QString("UPDATE t_movies SET rank=%1 WHERE id=%2;").arg(rank).arg(movieid);
+	QSqlQuery query;
+	if (!query.exec(sql)) {
+		qDebug() << "Error: " << query.lastError();
+		return false;
 	}
 	getSqlQueryModel();
 	return true;

@@ -8,6 +8,9 @@
 #include <QStandardItemModel>
 #include <qdir.h>
 
+#include "SqlQueryModel.h"
+
+
 class DBHandler : public QObject{
 	Q_OBJECT
 signals:
@@ -21,16 +24,23 @@ public:
 	int  isFieldExist(QString tableName, QString fieldName); 
 	bool addFilesToDB(QList<QFileInfo> Files);
 	void getAllMovies();
-	QSqlQueryModel* getSqlQueryModel();
+
+	SqlQueryModel* getSqlQueryModel(); //获取数据表
+	bool setModelFilter(QList<int> selectTagId, bool isAnd);  // 筛选tags
+	
+	// 标签功能
 	void getTags(QStandardItemModel* tags, QList<int>* tagid);
 	bool createTag(QString tag);
 	bool editTag(int id, QString tagName);
 	bool markTags(int movieid, QList<int> tagid);
 	bool earseTags(int movieid, QList<int> tagid);
-	bool setModelFilter(QList<int> selectTagId, bool isAnd);
+
+	// 星标功能
+	bool updateRank(int movieid, int rank);
+	
 private:
 	QSqlDatabase database;
 	QSqlTableModel* model;
-	QSqlQueryModel* qmodel;
+	SqlQueryModel* qmodel;
 };
 

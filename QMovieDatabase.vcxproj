@@ -90,6 +90,7 @@
     <ClCompile Include="DBHandler.cpp" />
     <ClCompile Include="MovieTable.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="SqlQueryModel.cpp" />
     <ClCompile Include="StarDelegate.cpp" />
     <ClCompile Include="StarEditor.cpp" />
     <ClCompile Include="StarRating.cpp" />
@@ -109,6 +110,8 @@
     <QtMoc Include="ClickableLabel.h" />
     <QtMoc Include="StarDelegate.h" />
     <QtMoc Include="StarEditor.h" />
+    <ClInclude Include="MovieTableColumIndex.h" />
+    <QtMoc Include="SqlQueryModel.h" />
     <ClInclude Include="StarRating.h" />
     <QtMoc Include="TagEditDiag.h" />
     <ClInclude Include="ui_createTag.h" />
