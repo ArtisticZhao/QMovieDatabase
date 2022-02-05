@@ -90,7 +90,9 @@
     <ClCompile Include="DBHandler.cpp" />
     <ClCompile Include="MovieTable.cpp" />
     <ClCompile Include="Settings.cpp" />
-    <ClCompile Include="TagEdit.cpp" />
+    <ClCompile Include="StarDelegate.cpp" />
+    <ClCompile Include="StarEditor.cpp" />
+    <ClCompile Include="StarRating.cpp" />
     <ClCompile Include="TagEditDiag.cpp" />
     <ClCompile Include="TagFilter.cpp" />
     <QtRcc Include="QMovieDatabase.qrc" />
@@ -105,7 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ClickableLabel.h" />
-    <ClInclude Include="TagEdit.h" />
+    <QtMoc Include="StarDelegate.h" />
+    <QtMoc Include="StarEditor.h" />
+    <ClInclude Include="StarRating.h" />
     <QtMoc Include="TagEditDiag.h" />
     <ClInclude Include="ui_createTag.h" />
     <QtMoc Include="CreateTagDiag.h" />

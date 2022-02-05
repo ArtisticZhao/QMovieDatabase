@@ -1,6 +1,6 @@
 #include "MovieTable.h"
 #include <QDebug>
-
+#include "StarDelegate.h"
 
 MovieTable::MovieTable(QTableView* tableview) {
 	this->tableView = tableview;
@@ -14,6 +14,13 @@ void MovieTable::on_tableView_double_clicked(const QModelIndex itemIndex) {
 		auto tagstr = tableView->model()->data(tableView->model()->index(itemIndex.row(), itemIndex.column())).toString();
 		QStringList tags = tagstr.split(",");
 		emit tagEditTrigger(tableView->model()->data(tableView->model()->index(itemIndex.row(), 0)).toInt(), tags);
+	}
+	else if (itemIndex.column() == 3)
+	{
+		// 双击rank
+		auto item = tableView->model()->flags(itemIndex);
+		
+		tableView->edit(itemIndex);
 	}
 	else {
 		//qDebug() << tableView->model()->data(tableView->model()->index(itemIndex.row(), itemIndex.column()));  // 当前双击
@@ -31,7 +38,8 @@ void MovieTable::bindingModel(QSqlQueryModel* model) {
 	this->tableView->setModel(model);
 	// 隐藏id列
 	this->tableView->setColumnHidden(0, true);
-	
+	// 设置星级显示
+	this->tableView->setItemDelegateForColumn(3, new StarDelegate);
 }
 
 void MovieTable::runPlayer(QStringList qs) {
