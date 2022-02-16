@@ -4,8 +4,9 @@
 #include <QSqlQueryModel>
 #include <QStandardItemModel>
 #include "DBHandler.h"
+#include "MovieTableView.h"
 
-class MovieTable : public QObject{
+class MovieTable : public QWidget{
 	Q_OBJECT
 signals:
 	void tagEditTrigger(int movieid, QStringList tags);  //双击 标签时发出的信号, 由mainwindow接收
@@ -13,12 +14,14 @@ signals:
 public slots:
 	void on_tableView_double_clicked(const QModelIndex);
 	void on_movieRankUpdate(int movieid, int rank);
+	void on_movieNamePathUpdate(int movieid, QString name, QString path);
 public:
-	MovieTable(QTableView* tableview, DBHandler* dbHandler);
+	MovieTable(MovieTableView* tableview, DBHandler* dbHandler);
 	void bindingModel(QSqlQueryModel* model);
 	void runPlayer(QStringList qs);
+
 private:
-	QTableView* tableView;
+	MovieTableView* tableView;
 	DBHandler* dbHandler;
 };
 

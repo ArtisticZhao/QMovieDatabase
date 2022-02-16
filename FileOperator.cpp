@@ -40,6 +40,29 @@ QList<QFileInfo> FileOperator::pathWalk(QString dirpath) {
 }
 
 
+bool FileOperator::isLegalFileName(QString filename) {
+	// 检查文件名是否合法，仅Windows下
+	if (filename.isEmpty()) {
+		return false;
+	}
+	bool is_legal = true;
+	QString pattern("[\\\\/:*?\"<>]");
+	QRegExp rx(pattern);
+	int match = filename.indexOf(rx);
+	if (match >= 0) {
+		is_legal = false;
+	}
+	return is_legal;
+}
+
+QString FileOperator::renameFile(QString fullpath, QString filename) {
+	QFile file(fullpath);
+	QFileInfo fileInfo(file.fileName());
+	QFileInfo newfi(fileInfo.absolutePath() + "/" + filename + "." + fileInfo.suffix());
+	file.rename(fullpath, newfi.absoluteFilePath());
+	return newfi.absoluteFilePath();
+}
+
 void FileOperator::runPlayer(QStringList paths) {
 	for (QString path : paths)
 	{

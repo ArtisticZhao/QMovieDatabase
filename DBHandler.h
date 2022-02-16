@@ -37,6 +37,7 @@ public:
 
 	// 星标功能
 	bool updateRank(int movieid, int rank);
+	bool updateNamePath(int movieid, QString name, QString path);  // 重命名name
 	
 private:
 	QSqlDatabase database;

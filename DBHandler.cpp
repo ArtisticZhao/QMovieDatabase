@@ -294,6 +294,17 @@ bool DBHandler::updateRank(int movieid, int rank) {
 	return true;
 }
 
+bool DBHandler::updateNamePath(int movieid, QString name, QString path) {
+	QString sql = QString("UPDATE t_movies SET name=\"%1\", path=\"%2\" WHERE id=%3;").arg(name).arg(path).arg(movieid);
+	QSqlQuery query;
+	if (!query.exec(sql)) {
+		qDebug() << "Error: " << query.lastError();
+		return false;
+	}
+	getSqlQueryModel();
+	return true;
+}
+
 bool DBHandler::setModelFilter(QList<int> selectTagId, bool isAnd) {
 	if (qmodel == nullptr) return false;
 	if (selectTagId.size()==0) {

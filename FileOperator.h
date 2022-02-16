@@ -15,6 +15,8 @@ private:
 public:
 	FileOperator(Settings* settings);
 	QList<QFileInfo> pathWalk(QString dirpath);
+	static bool isLegalFileName(QString filename);
+	static QString renameFile(QString fullpath, QString filename);
 
 public slots:
 	void runPlayer(QStringList paths);

@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QTableView" name="tableView"/>
+     <widget class="MovieTableView" name="tableView"/>
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -130,6 +130,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MovieTableView</class>
+   <extends>QTableView</extends>
+   <header location="global">movietableview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="QMovieDatabase.qrc"/>
  </resources>

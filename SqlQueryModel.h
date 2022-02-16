@@ -7,6 +7,7 @@ class SqlQueryModel : public QSqlQueryModel {
 	Q_OBJECT
 signals:
 	void movieRankUpdate(int movieid, int rank);
+	void movieNamePathUpdate(int movieid, QString name, QString path);
 public:
 	using QSqlQueryModel::QSqlQueryModel;
 	Qt::ItemFlags flags(const QModelIndex& index) const;
