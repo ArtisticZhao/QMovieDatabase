@@ -134,7 +134,7 @@
   <customwidget>
    <class>MovieTableView</class>
    <extends>QTableView</extends>
-   <header location="global">movietableview.h</header>
+   <header>movietableview.h</header>
   </customwidget>
  </customwidgets>
  <resources>
