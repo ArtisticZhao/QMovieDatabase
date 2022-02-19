@@ -88,7 +88,6 @@
     <ClCompile Include="ClickableLabel.cpp" />
     <ClCompile Include="CreateTagDiag.cpp" />
     <ClCompile Include="DBHandler.cpp" />
-    <ClCompile Include="MovieTable.cpp" />
     <ClCompile Include="MovieTableView.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SqlQueryModel.cpp" />
@@ -113,7 +112,7 @@
     <QtMoc Include="StarEditor.h" />
     <ClInclude Include="MovieTableColumIndex.h" />
     <QtMoc Include="SqlQueryModel.h" />
-    <ClInclude Include="MovieTableView.h" />
+    <QtMoc Include="MovieTableView.h" />
     <ClInclude Include="StarRating.h" />
     <QtMoc Include="TagEditDiag.h" />
     <ClInclude Include="ui_createTag.h" />
@@ -121,7 +120,6 @@
     <QtMoc Include="DBHandler.h" />
     <QtMoc Include="FileOperator.h" />
     <QtMoc Include="TagFilter.h" />
-    <QtMoc Include="MovieTable.h" />
     <ClInclude Include="Settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

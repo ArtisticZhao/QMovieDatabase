@@ -1,10 +1,8 @@
 #include <QFileDialog>
-#include <QDebug>
 #include <QStandardPaths>
-
 #include "QMovieDatabase.h"
 
-
+#include <QDebug>
 
 QMovieDatabase::QMovieDatabase(QWidget* parent)
 	: QMainWindow(parent) {
@@ -15,14 +13,14 @@ QMovieDatabase::QMovieDatabase(QWidget* parent)
 	// 加载DB
 	dbHandler = new DBHandler(settings.dbPath);
 	// 设置 movie table 界面
-	movieTable = new MovieTable(ui.tableView, dbHandler);
-	movieTable->bindingModel(dbHandler->getSqlQueryModel());
+	this->ui.tableView->set_dbHandler(dbHandler);
+	this->ui.tableView->bindingModel(dbHandler->getSqlQueryModel());
 	foperator = new FileOperator(&settings);
 	// 设置 标签筛选器
 	tagFilter = new TagFilter(ui.listView, dbHandler, ui.rb_selectModeAnd);
 	connect(dbHandler, SIGNAL(newTagAdded(QString, long)), tagFilter, SLOT(on_tagAdded(QString, long)));
-	connect(movieTable, SIGNAL(tagEditTrigger(int, QStringList)), this, SLOT(on_tagEditTrigger(int, QStringList)));
-	connect(movieTable, SIGNAL(runPlayerTrigger(QStringList)), foperator, SLOT(runPlayer(QStringList)));
+	connect(this->ui.tableView, SIGNAL(tagEditTrigger(int, QStringList)), this, SLOT(on_tagEditTrigger(int, QStringList)));
+	connect(this->ui.tableView, SIGNAL(runPlayerTrigger(QStringList)), foperator, SLOT(runPlayer(QStringList)));
 	
 }
 
@@ -48,7 +46,7 @@ void QMovieDatabase::on_actionPlayAll_triggered() {
 		onepath.append('"');*/
 		paths << ui.tableView->model()->data(ui.tableView->model()->index(i, 3)).toString();
 	}
-	movieTable->runPlayer(paths);
+	this->ui.tableView->runPlayer(paths);
 }
 
 void QMovieDatabase::on_pb_addTag_clicked() {
@@ -68,7 +66,6 @@ void QMovieDatabase::on_tagEditTrigger(int movieid, QStringList tags) {
 
 QMovieDatabase::~QMovieDatabase() {
 	delete dbHandler;
-	delete movieTable;
 	delete tagFilter;
 	delete foperator;
 }

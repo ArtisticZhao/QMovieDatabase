@@ -5,7 +5,6 @@
 #include "Settings.h"
 #include "FileOperator.h"
 #include "DBHandler.h"
-#include "MovieTable.h"
 #include "TagFilter.h"
 #include "CreateTagDiag.h"
 
@@ -21,7 +20,6 @@ private:
 	Ui::QMovieDatabaseClass ui;
 	Settings settings;
 	DBHandler* dbHandler;
-	MovieTable* movieTable;
 	TagFilter* tagFilter;
 	CreateTagDiag* createTag;
 	FileOperator* foperator;

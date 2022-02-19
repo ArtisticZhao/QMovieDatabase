@@ -55,9 +55,6 @@
     <ClCompile Include="DBHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MovieTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TagFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -99,14 +96,8 @@
     <ClInclude Include="MovieTableColumIndex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MovieTableView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MovieTable.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="CreateTagDiag.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -132,6 +123,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="SqlQueryModel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MovieTableView.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
