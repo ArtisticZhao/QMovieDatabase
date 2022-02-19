@@ -1,4 +1,5 @@
 #include "MovieTableView.h"
+#include <QHeaderView>
 #include "MovieTableColumIndex.h"
 #include "StarDelegate.h"
 #include "FileOperator.h"
@@ -150,6 +151,8 @@ void MovieTableView::bindingModel(SqlQueryModel* model) {
 	this->setColumnHidden(0, true);
 	// 设置星级显示
 	this->setItemDelegateForColumn(3, new StarDelegate);
+	// 设置自动列宽
+	this->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//所有列都扩展自适应宽度，填充充满整个屏幕宽度
 	// 绑定更新信号
 	connect(model, SIGNAL(movieRankUpdate(int, int)), this, SLOT(on_movieRankUpdate(int, int)));
 	connect(model, SIGNAL(movieNamePathUpdate(int, QString, QString)), this, SLOT(on_movieNamePathUpdate(int, QString, QString)));
