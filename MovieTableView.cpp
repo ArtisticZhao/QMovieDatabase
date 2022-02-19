@@ -55,6 +55,16 @@ void MovieTableView::on_actionPlay_triggered() {
 	}
 }
 
+void MovieTableView::on_actionOpenFolder_triggered() {
+	if (this->selectionModel()->hasSelection()) {
+		// 存在选中的对象, 如果多选则只重命名第一个
+		auto selections = this->selectionModel()->selectedIndexes();
+		auto index = this->model()->index(selections.at(0).row(), static_cast<int>(MovieTableColumIndex::Path));
+		auto fullpath = this->model()->data(index).toString();
+		FileOperator::openInFolder(fullpath);
+	}
+}
+
 void MovieTableView::on_actionRename_triggered() {
 	if (this->selectionModel()->hasSelection()) {
 		// 存在选中的对象, 如果多选则只重命名第一个
@@ -111,16 +121,19 @@ MovieTableView::MovieTableView(QWidget* parent /*= nullptr*/)
 	this->setContextMenuPolicy(Qt::CustomContextMenu);
 	contextMenu = new QMenu(this);
 	auto play = new QAction("Play", contextMenu);
+	auto openFolder = new QAction("Open Folder", contextMenu);
 	auto renameMovie = new QAction("Rename	<F2>", contextMenu);
 	auto deleteMovie = new QAction("Delete	<Del>", contextMenu);
 	auto selectMovie = new QAction("Select Path", contextMenu);
 	
 	contextMenu->addAction(play);
+	contextMenu->addAction(openFolder);
 	contextMenu->addAction(renameMovie);
 	contextMenu->addAction(deleteMovie);
 	contextMenu->addAction(selectMovie);
 	connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_menuClicked(QPoint)));   // 绑定右键菜单信号
 	connect(play, SIGNAL(triggered()), this, SLOT(on_actionPlay_triggered()));
+	connect(openFolder, SIGNAL(triggered()), this, SLOT(on_actionOpenFolder_triggered()));
 	connect(renameMovie, SIGNAL(triggered()), this, SLOT(on_actionRename_triggered()));
 	connect(deleteMovie, SIGNAL(triggered()), this, SLOT(on_actionDelete_triggered()));
 	connect(selectMovie, SIGNAL(triggered()), this, SLOT(on_actionSelect_triggered()));

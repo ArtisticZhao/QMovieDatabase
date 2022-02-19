@@ -103,6 +103,17 @@ QString FileOperator::selectFile(QString dir) {
 	return "";
 }
 
+void FileOperator::openInFolder(QString& fullpath) {
+	//打开资源管理器并高亮文件
+	const QString explorer = "explorer";
+	QStringList param;
+	if (!QFileInfo(fullpath).isDir()) {
+		param << QLatin1String("/select,");
+	}
+	param << QDir::toNativeSeparators(fullpath);
+	QProcess::startDetached(explorer, param);
+}
+
 void FileOperator::runPlayer(QStringList paths) {
 	for (QString path : paths)
 	{

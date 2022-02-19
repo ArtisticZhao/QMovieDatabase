@@ -22,6 +22,7 @@ public:
 	static bool deleteFile(QString fullpath);
 
 	static QString selectFile(QString dir);
+	static void openInFolder(QString& fullpath);
 
 public slots:
 	void runPlayer(QStringList paths);

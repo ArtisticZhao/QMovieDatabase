@@ -16,6 +16,7 @@ public slots:
 	void on_movieNamePathUpdate(int movieid, QString name, QString path);
 	void on_menuClicked(QPoint pos);
 	void on_actionPlay_triggered();
+	void on_actionOpenFolder_triggered();
 	void on_actionRename_triggered();
 	void on_actionDelete_triggered();
 	void on_actionSelect_triggered();
