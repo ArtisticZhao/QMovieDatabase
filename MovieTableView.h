@@ -1,6 +1,7 @@
 #pragma once
 #include <qtableview.h>
 #include <QKeyEvent>
+#include <QMenu>
 #include "DBHandler.h"
 #include "SqlQueryModel.h"
 
@@ -13,6 +14,11 @@ public slots:
 	void on_doubleClicked(const QModelIndex);
 	void on_movieRankUpdate(int movieid, int rank);
 	void on_movieNamePathUpdate(int movieid, QString name, QString path);
+	void on_menuClicked(QPoint pos);
+	void on_actionPlay_triggered();
+	void on_actionRename_triggered();
+	void on_actionDelete_triggered();
+	void on_actionSelect_triggered();
 public:
 	explicit MovieTableView(QWidget* parent = nullptr);
 	void set_dbHandler(DBHandler* dbHandler);
@@ -22,5 +28,6 @@ protected:
 	virtual void keyPressEvent(QKeyEvent* event);
 private:
 	DBHandler* dbHandler;
+	QMenu* contextMenu;  //ÓÒ¼ü²Ëµ¥
 };
 

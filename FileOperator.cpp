@@ -63,6 +63,16 @@ QString FileOperator::renameFile(QString fullpath, QString filename) {
 	return newfi.absoluteFilePath();
 }
 
+bool FileOperator::isExistFile(QString fullpath) {
+	QFileInfo fileInfo(fullpath);
+	return fileInfo.isFile();
+}
+
+bool FileOperator::deleteFile(QString fullpath) {
+	QFile file(fullpath);
+	return file.remove();
+}
+
 void FileOperator::runPlayer(QStringList paths) {
 	for (QString path : paths)
 	{

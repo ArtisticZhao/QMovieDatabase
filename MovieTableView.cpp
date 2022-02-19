@@ -1,6 +1,7 @@
 #include "MovieTableView.h"
 #include "MovieTableColumIndex.h"
 #include "StarDelegate.h"
+#include "FileOperator.h"
 #include <QDebug>
 
 void MovieTableView::on_doubleClicked(const QModelIndex itemIndex) {
@@ -40,12 +41,76 @@ void MovieTableView::on_movieNamePathUpdate(int movieid, QString name, QString p
 	}
 }
 
+
+void MovieTableView::on_menuClicked(QPoint pos) {
+	contextMenu->exec(QCursor::pos());
+}
+
+void MovieTableView::on_actionPlay_triggered() {
+	if (this->selectionModel()->hasSelection()) {
+		// 存在选中的对象, 如果多选则只重命名第一个
+		auto selections = this->selectionModel()->selectedIndexes();
+		auto index = this->model()->index(selections.at(0).row(), static_cast<int>(MovieTableColumIndex::Path));
+		emit runPlayerTrigger(QStringList(this->model()->data(index).toString()));
+	}
+}
+
+void MovieTableView::on_actionRename_triggered() {
+	if (this->selectionModel()->hasSelection()) {
+		// 存在选中的对象, 如果多选则只重命名第一个
+		auto selections = this->selectionModel()->selectedIndexes();
+		auto index = this->model()->index(selections.at(0).row(), static_cast<int>(MovieTableColumIndex::Name));
+		this->edit(index);
+	}
+}
+
+void MovieTableView::on_actionDelete_triggered() {
+	if (this->selectionModel()->hasSelection()) {
+		// 存在选中的对象
+		auto selections = this->selectionModel()->selectedIndexes();
+		for (auto selectedIndex: selections){
+			auto index = this->model()->index(selectedIndex.row(), static_cast<int>(MovieTableColumIndex::Path));
+			auto fullpath = this->model()->data(index).toString();
+			auto res = FileOperator::deleteFile(fullpath);
+			qDebug() << res;
+			qDebug() << FileOperator::isExistFile(fullpath);
+			if (!FileOperator::isExistFile(fullpath)) {
+				// 删除文件成功，或文件不存在，从数据库中移除记录
+				index = this->model()->index(selections.at(0).row(), static_cast<int>(MovieTableColumIndex::ID));
+				auto movieid = this->model()->data(index).toInt();
+				dbHandler->removeMovie(movieid);
+			}
+		}
+	}
+}
+
+void MovieTableView::on_actionSelect_triggered() {
+
+}
+
 MovieTableView::MovieTableView(QWidget* parent /*= nullptr*/)
 	:QTableView(parent) {
 	this->dbHandler = nullptr;
 	// 禁止双击等编辑模式，只能通过规定好的方式进行编辑
 	this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	connect(this, SIGNAL(doubleClicked(const QModelIndex)), this, SLOT(on_doubleClicked(const QModelIndex)));
+	// 设置右键菜单
+	this->setContextMenuPolicy(Qt::CustomContextMenu);
+	contextMenu = new QMenu(this);
+	auto play = new QAction("Play", contextMenu);
+	auto renameMovie = new QAction("Rename	<F2>", contextMenu);
+	auto deleteMovie = new QAction("Delete	<Del>", contextMenu);
+	auto selectMovie = new QAction("Select Path", contextMenu);
+	
+	contextMenu->addAction(play);
+	contextMenu->addAction(renameMovie);
+	contextMenu->addAction(deleteMovie);
+	contextMenu->addAction(selectMovie);
+	connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_menuClicked(QPoint)));   // 绑定右键菜单信号
+	connect(play, SIGNAL(triggered()), this, SLOT(on_actionPlay_triggered()));
+	connect(renameMovie, SIGNAL(triggered()), this, SLOT(on_actionRename_triggered()));
+	connect(deleteMovie, SIGNAL(triggered()), this, SLOT(on_actionDelete_triggered()));
+	connect(selectMovie, SIGNAL(triggered()), this, SLOT(on_actionSelect_triggered()));
+	connect(this, SIGNAL(doubleClicked(const QModelIndex)), this, SLOT(on_doubleClicked(const QModelIndex)));  // 绑定双击信号
 }
 
 void MovieTableView::set_dbHandler(DBHandler* dbHandler) {

@@ -17,6 +17,8 @@ public:
 	QList<QFileInfo> pathWalk(QString dirpath);
 	static bool isLegalFileName(QString filename);
 	static QString renameFile(QString fullpath, QString filename);
+	static bool isExistFile(QString fullpath);
+	static bool deleteFile(QString fullpath);
 
 public slots:
 	void runPlayer(QStringList paths);

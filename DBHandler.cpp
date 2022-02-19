@@ -305,6 +305,25 @@ bool DBHandler::updateNamePath(int movieid, QString name, QString path) {
 	return true;
 }
 
+bool DBHandler::removeMovie(int movieid) {
+	// 需要删除t_movies 和 t_union 中的全部记录
+	bool res = true;
+	res |= execSql(QString("DELETE FROM t_movies WHERE id=%1").arg(movieid));
+	res |= execSql(QString("DELETE FROM t_unions WHERE movie_id=%1").arg(movieid));
+	if (!res) return res;
+	getSqlQueryModel();
+	return true;
+}
+
+bool DBHandler::execSql(QString oneLine) {
+	QSqlQuery query;
+	if (!query.exec(oneLine)) {
+		qDebug() << "Error: " << query.lastError();
+		return false;
+	}
+	return true;
+}
+
 bool DBHandler::setModelFilter(QList<int> selectTagId, bool isAnd) {
 	if (qmodel == nullptr) return false;
 	if (selectTagId.size()==0) {

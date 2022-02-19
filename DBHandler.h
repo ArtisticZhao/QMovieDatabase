@@ -38,10 +38,13 @@ public:
 	// 星标功能
 	bool updateRank(int movieid, int rank);
 	bool updateNamePath(int movieid, QString name, QString path);  // 重命名name
+
+	bool removeMovie(int movieid); // 删除记录
 	
 private:
 	QSqlDatabase database;
 	QSqlTableModel* model;
 	SqlQueryModel* qmodel;
+	bool execSql(QString oneLine);
 };
 
