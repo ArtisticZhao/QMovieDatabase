@@ -1,8 +1,10 @@
 #include "FileOperator.h"
+#include <QFileDialog>
 #include <QProcess>
 #include <qDebug>
 #include <QThread>
 
+Settings FileOperator::settings_static = Settings();
 
 FileOperator::FileOperator(Settings* settings) {
 	this->settings = settings;
@@ -63,6 +65,11 @@ QString FileOperator::renameFile(QString fullpath, QString filename) {
 	return newfi.absoluteFilePath();
 }
 
+QString FileOperator::getAbsDir(QString filepath) {
+	QFileInfo fileInfo(filepath);
+	return fileInfo.absolutePath();
+}
+
 bool FileOperator::isExistFile(QString fullpath) {
 	QFileInfo fileInfo(fullpath);
 	return fileInfo.isFile();
@@ -71,6 +78,29 @@ bool FileOperator::isExistFile(QString fullpath) {
 bool FileOperator::deleteFile(QString fullpath) {
 	QFile file(fullpath);
 	return file.remove();
+}
+
+QString FileOperator::selectFile(QString dir) {
+	QFileDialog fd;
+	fd.setWindowTitle(QStringLiteral("选择替换文件"));
+	fd.setDirectory(dir);  // 设置默认文件夹为旧文件所在的文件夹  FileOperator::getAbsDir(oldpath)
+	fd.setFileMode(QFileDialog::ExistingFile); // 单选文件
+	// 设置选择文件过滤器
+	QString filter = settings_static.fileFilter;
+	QStringList filters = filter.split(' ');
+	QString nameFilters;
+	for (QString ft : filters) {
+		nameFilters += QString(" *.%1").arg(ft);
+	}
+	fd.setNameFilter(nameFilters);
+	fd.setViewMode(QFileDialog::Detail); //设置视图模式
+	if (fd.exec()) {
+		auto files = fd.selectedFiles();
+		if (files.length() > 0) {
+			return files.at(0);
+		}
+	}
+	return "";
 }
 
 void FileOperator::runPlayer(QStringList paths) {

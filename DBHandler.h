@@ -40,6 +40,7 @@ public:
 	bool updateNamePath(int movieid, QString name, QString path);  // ÖØÃüÃûname
 
 	bool removeMovie(int movieid); // É¾³ı¼ÇÂ¼
+	bool updatePath(int movieid, QString path);
 	
 private:
 	QSqlDatabase database;

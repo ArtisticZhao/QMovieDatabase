@@ -315,6 +315,15 @@ bool DBHandler::removeMovie(int movieid) {
 	return true;
 }
 
+bool DBHandler::updatePath(int movieid, QString path) {
+	QString sql = QString("UPDATE t_movies SET path=\"%1\" WHERE id=%2;").arg(path).arg(movieid);
+	if (!execSql(sql)) {
+		return false;
+	}
+	getSqlQueryModel();
+	return true;
+}
+
 bool DBHandler::execSql(QString oneLine) {
 	QSqlQuery query;
 	if (!query.exec(oneLine)) {

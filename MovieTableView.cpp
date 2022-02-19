@@ -68,7 +68,7 @@ void MovieTableView::on_actionDelete_triggered() {
 	if (this->selectionModel()->hasSelection()) {
 		// 存在选中的对象
 		auto selections = this->selectionModel()->selectedIndexes();
-		for (auto selectedIndex: selections){
+		for (auto& selectedIndex: selections){
 			auto index = this->model()->index(selectedIndex.row(), static_cast<int>(MovieTableColumIndex::Path));
 			auto fullpath = this->model()->data(index).toString();
 			auto res = FileOperator::deleteFile(fullpath);
@@ -85,7 +85,21 @@ void MovieTableView::on_actionDelete_triggered() {
 }
 
 void MovieTableView::on_actionSelect_triggered() {
-
+	if (this->selectionModel()->hasSelection()) {
+		// 存在选中的对象, 如果多选则只重命名第一个
+		auto selections = this->selectionModel()->selectedIndexes();
+		auto index = this->model()->index(selections.at(0).row(), static_cast<int>(MovieTableColumIndex::Path));
+		auto oldpath = this->model()->data(index).toString();
+		index = this->model()->index(selections.at(0).row(), static_cast<int>(MovieTableColumIndex::ID));
+		auto id = this->model()->data(index).toUInt();
+		// 打开文件选择对话框来选择文件
+		QString fullpath;
+		fullpath = FileOperator::selectFile(FileOperator::getAbsDir(oldpath));
+		qDebug() << fullpath;
+		if (fullpath.length()>0) {
+			dbHandler->updatePath(id, fullpath);
+		}
+	}
 }
 
 MovieTableView::MovieTableView(QWidget* parent /*= nullptr*/)
